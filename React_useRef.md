@@ -1,4 +1,4 @@
-<!-- 1.Для чего нужен Ref в React? -->
+# 1.Для чего нужен Ref в React?
 
 Ref в React - это механизм, который позволяет вам получать доступ к DOM-элементам или другим компонентам в функциональных компонентах. Он также может использоваться для сохранения изменяемых значений между рендерами компонента. Ref обеспечивает способ взаимодействия с элементами интерфейса или другой информацией вне обычного потока обновления компонента.
 
@@ -12,43 +12,48 @@ Ref в React - это механизм, который позволяет вам
 
 Пример использования Ref для доступа к DOM-элементу:
 
-import React, { useRef, useEffect } from 'react';
+```js
+import React, { useRef, useEffect } from "react";
 
 function MyComponent() {
-const inputRef = useRef(null);
+  const inputRef = useRef(null);
 
-useEffect(() => {
-inputRef.current.focus();
-}, []);
+  useEffect(() => {
+    inputRef.current.focus();
+  }, []);
 
-return <input ref={inputRef} />;
+  return <input ref={inputRef} />;
 }
+```
+
 Пример использования Ref для сохранения изменяемого значения:
 
-import React, { useState, useRef } from 'react';
+```js
+import React, { useState, useRef } from "react";
 
 function Counter() {
-const [count, setCount] = useState(0);
-const prevCountRef = useRef();
+  const [count, setCount] = useState(0);
+  const prevCountRef = useRef();
 
-useEffect(() => {
-prevCountRef.current = count;
-});
+  useEffect(() => {
+    prevCountRef.current = count;
+  });
 
-const prevCount = prevCountRef.current;
+  const prevCount = prevCountRef.current;
 
-return (
-
-<div>
-<p>Current Count: {count}</p>
-<p>Previous Count: {prevCount}</p>
-<button onClick={() => setCount(count + 1)}>Increment</button>
-</div>
-);
+  return (
+    <div>
+      <p>Current Count: {count}</p>
+      <p>Previous Count: {prevCount}</p>
+      <button onClick={() => setCount(count + 1)}>Increment</button>
+    </div>
+  );
 }
+```
+
 Ref следует использовать с осторожностью, так как он позволяет обходить обычный поток данных в React и может усложнить отладку и поддержку кода.
 
-<!-- 2.Что такое useRef? -->
+# 2.Что такое useRef?
 
 useRef - это хук (hook) в React, который позволяет получить доступ к DOM-элементам или хранить переменные, которые будут сохранять свои значения между рендерами компонента.
 
@@ -61,87 +66,99 @@ useRef - это хук (hook) в React, который позволяет пол
 Примеры использования useRef:
 
 Получение ссылки на DOM-элемент:
-import React, { useRef, useEffect } from 'react';
+
+```js
+import React, { useRef, useEffect } from "react";
 
 function MyComponent() {
-const inputRef = useRef(null);
+  const inputRef = useRef(null);
 
-useEffect(() => {
-// Фокусируемся на поле ввода при монтировании компонента
-inputRef.current.focus();
-}, []);
+  useEffect(() => {
+    // Фокусируемся на поле ввода при монтировании компонента
+    inputRef.current.focus();
+  }, []);
 
-return (
-
-<div>
-<input ref={inputRef} type="text" />
-</div>
-);
+  return (
+    <div>
+      <input ref={inputRef} type="text" />
+    </div>
+  );
 }
+```
+
 Сохранение переменных между рендерами:
-import React, { useState, useRef } from 'react';
+
+```js
+import React, { useState, useRef } from "react";
 
 function MyComponent() {
-const countRef = useRef(0); // Используем useRef для сохранения значения
+  const countRef = useRef(0); // Используем useRef для сохранения значения
 
-const handleButtonClick = () => {
-countRef.current++; // Изменяем значение без вызова rerender
-console.log('Current count:', countRef.current);
-};
+  const handleButtonClick = () => {
+    countRef.current++; // Изменяем значение без вызова rerender
+    console.log("Current count:", countRef.current);
+  };
 
-return (
-
-<div>
-<button onClick={handleButtonClick}>Увеличить счетчик</button>
-</div>
-);
+  return (
+    <div>
+      <button onClick={handleButtonClick}>Увеличить счетчик</button>
+    </div>
+  );
 }
+```
+
 Обратите внимание, что useRef обновляется без вызова повторного рендеринга компонента, поэтому изменение значения useRef не вызовет обновления компонента, в отличие от обновления состояния через useState.
 
-<!-- 3. Типичный и нетипичный способы применения useRef. -->
+# 3. Типичный и нетипичный способы применения useRef.
 
 useRef() возвращает изменяемый ref-объект, свойство .current которого инициализируется переданным аргументом (initialValue). Возвращённый объект будет сохраняться в течение всего времени жизни компонента. По сути, useRef похож на «коробку», которая может содержать изменяемое значение в своём свойстве .current.
 
 Типичный случай использования — это доступ к потомку в императивном стиле:
 
+```js
 function TextInputWithFocusButton() {
-const inputEl = useRef(null);
-const onButtonClick = () => {
-// `current` указывает на смонтированный элемент `input`
-inputEl.current.focus();
-};
-return (
-<>
-<input ref={inputEl} type="text" />
-<button onClick={onButtonClick}>Установить фокус на поле ввода</button>
-</>
-);
+  const inputEl = useRef(null);
+  const onButtonClick = () => {
+    // `current` указывает на смонтированный элемент `input`
+    inputEl.current.focus();
+  };
+  return (
+    <>
+      <input ref={inputEl} type="text" />
+      <button onClick={onButtonClick}>Установить фокус на поле ввода</button>
+    </>
+  );
 }
+```
+
 Хук useRef() может использоваться не только для DOM-рефов. Реф — это общий контейнер, а его свойство current — изменяемое и может хранить любое значение, подобно свойству экземпляра класса. Например:
 
+```js
 function Timer() {
-const intervalRef = useRef();
+  const intervalRef = useRef();
 
-useEffect(() => {
-const id = setInterval(() => {
-// ...
-});
-intervalRef.current = id;
-return () => {
-clearInterval(intervalRef.current);
-};
-});
+  useEffect(() => {
+    const id = setInterval(() => {
+      // ...
+    });
+    intervalRef.current = id;
+    return () => {
+      clearInterval(intervalRef.current);
+    };
+  });
 
-// ...
+  // ...
 }
 
 function handleCancelClick() {
-clearInterval(intervalRef.current);
+  clearInterval(intervalRef.current);
 }
 // ...
+```
+
 В этом примере мы храним id setInterval в поле .current рефа для сброса в функции handleCancelClick()
 
-<!-- 4. Какова внутренняя реализация useRef в React и как она функционирует внутри компонента? -->
+# 4. Какова внутренняя реализация useRef в React и как она функционирует внутри компонента?
 
 Внутренняя реализация useRef в React достаточно интересна. Она использует объект, называемый "мутабельный объект" (mutable object), чтобы обеспечить сохранение изменяемых значений между рендерами компонента без вызова перерисовки. По сути, useRef использует ту же ссылку на объект между рендерами, не вызывая перерисовку компонента при изменении значения.
 
